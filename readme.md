@@ -123,6 +123,10 @@ This library is a **minimalist**, **type-safe**, and **declarative** graph execu
 
 It’s **not** trying to replace general DAG runners — it’s for when you want **typed, programmatic, embeddable graph logic** inside a real system.
 
----
-
-Would you like an "examples/" folder layout or sample `tests/` to go with this?
+License:
+- Today, free for personal use only
+- Can not be included as part of any paid service
+- Free licence can be revoked
+- Experimental
+- All rights reserved
+- Use at own risk

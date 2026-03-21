@@ -1,27 +1,32 @@
+from pathlib import Path
 from setuptools import setup
 
 import os
 import sys
 import subprocess
 
-#path = os.path.dirname(os.path.abspath(sys.argv[0]))
-#subprocess.run(["setx", "PATH", "%PATH%;"+path], shell=True)
+
+long_description = Path("readme.md").read_text(encoding="utf-8")
 
 setup(
-    name='decw',
+    name='processing_graph',
     version='0.1.0',    
     description='The Decelium Graph Processor',
-    url='https://github.com/Decelium/decelium_wallet.git',
+    url='https://github.com/JustinGirard/processing_graph.git',
     author='Justin Girard',
     author_email='justingirard@decelium.com',
-    packages=['decelium_wallet','decelium_wallet.commands', 'decelium_wallet.tests','decelium_wallet.networkchannels', 'decelium_wallet.database'],
+    packages=['processing_graph'],
     entry_points = {
-        'console_scripts': ['decw=decelium_wallet.decw:run'],
+   
     },
-    install_requires=[ 'ecdsa',
-                        'cryptography',
-                        'flask',
-                        'pandas',
-                        'zipfile36'
-                      ],
+    long_description=long_description,
+    long_description_content_type="text/markdown",
+    install_requires=[
+        "nodejobs>=0.3.0",
+    ],
+    python_requires=">=3.7",
+    classifiers=[
+        "Programming Language :: Python :: 3",
+        "License :: Other/Proprietary License",
+    ],
 )
