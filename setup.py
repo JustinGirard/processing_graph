@@ -6,9 +6,7 @@ import sys
 import subprocess
 
 
-long_description = (Path(__file__).resolve().parent / "README.md").read_text(
-    encoding="utf-8"
-)
+long_description = Path("README.md").read_text(encoding="utf-8")
 
 setup(
     name="processing_graph",
