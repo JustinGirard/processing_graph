@@ -1,7 +1,3 @@
-Here’s a README-style explanation aimed at senior developers:
-
----
-
 ## 🧠 Why This Graph Processing Library?
 
 This library provides a **type-safe**, **schema-enforced**, and **extensible** graph processing engine built around declarative node definitions and runtime-validated data structures.
