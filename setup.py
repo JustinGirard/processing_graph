@@ -6,19 +6,17 @@ import sys
 import subprocess
 
 
-long_description = Path("readme.md").read_text(encoding="utf-8")
+long_description = Path("README.md").read_text(encoding="utf-8")
 
 setup(
-    name='processing_graph',
-    version='0.1.0',    
-    description='The Decelium Graph Processor',
-    url='https://github.com/JustinGirard/processing_graph.git',
-    author='Justin Girard',
-    author_email='justingirard@decelium.com',
-    packages=['processing_graph'],
-    entry_points = {
-   
-    },
+    name="processing_graph",
+    version="0.1.0",
+    description="The Decelium Graph Processor",
+    url="https://github.com/JustinGirard/processing_graph.git",
+    author="Justin Girard",
+    author_email="justingirard@decelium.com",
+    packages=["processing_graph"],
+    entry_points={},
     long_description=long_description,
     long_description_content_type="text/markdown",
     install_requires=[
