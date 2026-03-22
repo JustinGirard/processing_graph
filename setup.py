@@ -1,12 +1,14 @@
 from pathlib import Path
-from setuptools import setup
+from setuptools import setup, find_packages
 
 import os
 import sys
 import subprocess
 
 
-long_description = Path("README.md").read_text(encoding="utf-8")
+long_description = (Path(__file__).resolve().parent / "README.md").read_text(
+    encoding="utf-8"
+)
 
 setup(
     name="processing_graph",
@@ -15,7 +17,7 @@ setup(
     url="https://github.com/JustinGirard/processing_graph.git",
     author="Justin Girard",
     author_email="justingirard@decelium.com",
-    packages=["processing_graph"],
+    packages=find_packages(),
     entry_points={},
     long_description=long_description,
     long_description_content_type="text/markdown",
