@@ -294,7 +294,12 @@ class BaseProcessor:
         pass
 
     def process_node(
-        self, proc_node: ProcessingNode, feature, lastFeature={}, for_graph=None
+        self,
+        proc_node: ProcessingNode,
+        feature,
+        lastFeature={},
+        for_graph=None,
+        skip_dependencies=False,
     ):
         proc_node.lastFeature = lastFeature
         proc_node.feature = feature
@@ -319,13 +324,29 @@ class BaseProcessor:
             # and debugging of the graph at an edge level. I have not had this issue ever, over dozens of projects
             # So even though I hate it, I will opt to just "leave it alone"
             # However, I want to leave this comment about this none issue.
-            if proc_node.dependencies[k].settings["name"] not in feature:
+            dep_name = proc_node.dependencies[k].settings["name"]
+            if dep_name not in feature:
+                if skip_dependencies:
+                    node_def = self.networkDef.get(dep_name, {})
+                    cached = node_def.get("output") if isinstance(node_def, dict) else None
+                    if isinstance(cached, dict):
+                        dep_methods = node_def.get("dependencies") if isinstance(node_def, dict) else None
+                        if isinstance(dep_methods, dict) and len(dep_methods) == 1:
+                            m = next(iter(dep_methods.keys()))
+                            if m not in cached:
+                                cached = {m: cached}
+                        feature[dep_name] = cached
+                    else:
+                        feature[dep_name] = {}
+                    continue
                 self.process_node(
-                    proc_node.dependencies[k], feature, lastFeature, for_graph
+                    proc_node.dependencies[k],
+                    feature,
+                    lastFeature,
+                    for_graph,
+                    skip_dependencies=skip_dependencies,
                 )
-                assert proc_node.dependencies[k].settings["name"] in feature, (
-                    "The node did not correctly deposit results"
-                )
+                assert dep_name in feature, ("The node did not correctly deposit results")
 
         features = {}
         # Build your personal processing feature
@@ -346,7 +367,7 @@ class BaseProcessor:
         proc_node.retVal = feature
         return proc_node.retVal
 
-    def process(self, feature=None, rootIn=""):
+    def process(self, feature=None, rootIn="", skip_dependencies=False):
         # We have to set every node in the network to it's "unprocessed" state
         self.do_preprocess()
         if feature == None:
@@ -363,14 +384,22 @@ class BaseProcessor:
                 if not instanceName in feature or not feature[instanceName]:
                     # feature = self.instanceMap[instanceName].process(feature,self.lastFeature,self)
                     feature = self.process_node(
-                        self.instanceMap[instanceName], feature, self.lastFeature, self
+                        self.instanceMap[instanceName],
+                        feature,
+                        self.lastFeature,
+                        self,
+                        skip_dependencies=skip_dependencies,
                     )
         else:
             try:
                 self.executed_nodes.append("Root Entry: " + targetNode)
                 # feature = self.instanceMap[targetNode].process(feature,self.lastFeature,self)
                 feature = self.process_node(
-                    self.instanceMap[targetNode], feature, self.lastFeature, self
+                    self.instanceMap[targetNode],
+                    feature,
+                    self.lastFeature,
+                    self,
+                    skip_dependencies=skip_dependencies,
                 )
             except Exception as exc:
                 # raise exc
